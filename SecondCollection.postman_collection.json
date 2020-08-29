@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "dc1af761-aebf-4c33-8102-59033ed9eba7",
+		"name": "SecondCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GETTest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "08f8b603-6bca-4c88-9eb2-87a754ad2c40",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.text()).to.include(\"false\");\r",
+							"});\r",
+							"    let jsonData = pm.response.json();\r",
+							"    console.log(typeof jsonData.args.isGood);\r",
+							"\r",
+							"pm.test(\"GetTest Passed\", function () {\r",
+							"    pm.expect(jsonData.args.isGood).to.eql('true');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/get?isGood=true&isBad=false",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "isGood",
+							"value": "true"
+						},
+						{
+							"key": "isBad",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostReq",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "947909ed-7f70-41e8-9bac-8548937457ed",
+						"exec": [
+							"let date = Date.now();\r",
+							"console.log(date);\r",
+							"    pm.globals.set(\"currentDate\", date);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "56374226-d360-42c3-8c34-91daa28db73b",
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Global Variable Passing check\", function () {\r",
+							"    pm.expect(jsonData.json.currentDate).to.eql(pm.globals.get(\"currentDate\"));\r",
+							"});\r",
+							"console.log(jsonData.json.permissions[2]);\r",
+							"/* \r",
+							"pm.test(\"ArrayValue Assertion Check\", function () {\r",
+							"    pm.expect(jsonData.json.permissions[2]).to.eql(4000);\r",
+							"});\r",
+							"**Since array values changes every time best practice is mentioned below\r",
+							"*/\r",
+							"pm.test(\"ArrayValue Assertion Check\", function () {\r",
+							"    pm.expect(jsonData.json.permissions).to.include(4000);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"John\",\r\n    \"permissions\": [\r\n        2000,\r\n        3000,\r\n        4000\r\n    ],\r\n    \"currentDate\": {{currentDate}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/posts",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutReq",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "930a394b-11b8-406b-9eaf-3297f8b02471",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql('application/json');\r",
+							"    pm.expect(pm.request.headers.get(\"Content-Type\")).to.eql('application/x-www-form-urlencoded');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "johndoe",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "example@example.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/put",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"put"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
